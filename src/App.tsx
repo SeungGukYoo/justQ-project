@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import "./App.css";
+import List from "./components/list";
 import { HttpClient } from "./util/httpClient";
-
 export interface ResponseData {
   brand: string;
   category_code: string;
@@ -38,8 +39,8 @@ function App({ httpClient }: Prop) {
 
   return (
     <div className="home">
-      <h1>Just Q Shopping List</h1>
-      <details>
+      <h1 className="title">Just Q Shopping List</h1>
+      <details className="perPage">
         <summary>페이지 별 상품 수</summary>
         <ul data-testid="per-page">
           <li>5</li>
@@ -49,34 +50,25 @@ function App({ httpClient }: Prop) {
           <li>100</li>
         </ul>
       </details>
-      <div>
-        <ul data-testid="item-list">
-          {itemList?.map((item, idx) => {
-            if (idx < 3) {
-              return <li key={item.id}>{item.product_name}</li>;
-            } else return;
-          })}
-        </ul>
+      <div className="itemList">
+        {itemList.length ? <List itemList={itemList} /> : <p className="loadingText">Loading...</p>}
       </div>
-      <div>
+      <div className="navigationBar">
         <button>첫 페이지</button>
         <button>이전 페이지</button>
         <ul data-testid="page-count">
-          <li>
-            <button>1</button>
+          <li
+            style={{
+              color: `${true ? "black" : "#eee"}`,
+              cursor: `${true ? "default" : "pointer"}`,
+            }}
+          >
+            1
           </li>
-          <li>
-            <button>2</button>
-          </li>
-          <li>
-            <button>3</button>
-          </li>
-          <li>
-            <button>4</button>
-          </li>
-          <li>
-            <button>5</button>
-          </li>
+          <li>2</li>
+          <li>3</li>
+          <li>4</li>
+          <li>5</li>
         </ul>
         <button>다음 페이지</button>
         <button>마지막 페이지</button>
