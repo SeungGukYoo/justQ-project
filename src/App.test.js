@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom";
-import { render, screen, within } from "@testing-library/react";
+import { findByTestId, render, screen, within } from "@testing-library/react";
 import App from "./App";
 
-test("only renders a UI", () => {
+test("only renders a UI", async () => {
   render(<App />);
 
   const header = screen.getByText("Just Q Shopping List");
@@ -10,6 +10,8 @@ test("only renders a UI", () => {
   const perPage = screen.getByTestId("per-page");
   const pageCount = screen.getByTestId("page-count");
   const perPageList = within(perPage).getAllByRole("listitem");
+  const itemList = await screen.findByTestId("item-list");
+  const itemCount = await within(itemList).findByRole("listitem");
 
   const pageCountList = within(pageCount).getAllByRole("listitem");
   const nextPage = screen.getByRole("button", {
@@ -28,6 +30,7 @@ test("only renders a UI", () => {
 
   expect(perPageList).toHaveLength(5);
   expect(pageCountList).toHaveLength(5);
+  expect(itemCount).toBeGreaterThanOrEqual(1);
   expect(prePage).toBeInTheDocument();
   expect(nextPage).toBeInTheDocument();
   expect(firstPage).toBeInTheDocument();
