@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { HttpClient } from "./util/httpClient";
 
-interface ResponseData {
+export interface ResponseData {
   brand: string;
   category_code: string;
   id: string;
@@ -14,14 +15,17 @@ interface ResponseData {
   status: string;
 }
 
-function App() {
+interface Prop {
+  httpClient: HttpClient;
+}
+function App({ httpClient }: Prop) {
   const [itemList, setItemList] = useState<[] | ResponseData[]>([]);
+
   useEffect(() => {
     const callData = async () => {
       try {
-        const data = await fetch("https://just-q-json-server-vercel.vercel.app/posts");
-        const json = await data.json();
-        setItemList(json);
+        const data = await httpClient.get();
+        setItemList(data);
       } catch (error) {
         if (error instanceof Error) {
           throw new Error(error.message);
@@ -30,8 +34,8 @@ function App() {
     };
 
     callData();
-  }, []);
-  console.log(itemList);
+  }, [setItemList, httpClient]);
+
   return (
     <div className="home">
       <h1>Just Q Shopping List</h1>
@@ -50,7 +54,7 @@ function App() {
           {itemList?.map((item, idx) => {
             if (idx < 3) {
               return <li key={item.id}>{item.product_name}</li>;
-            }
+            } else return;
           })}
         </ul>
       </div>
