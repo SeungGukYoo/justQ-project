@@ -1,9 +1,11 @@
 import "@testing-library/jest-dom";
-import { findByTestId, render, screen, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import App from "./App";
+import { HttpClient } from "./util/httpClient";
 
 test("only renders a UI", async () => {
-  render(<App />);
+  const httpClient = new HttpClient();
+  render(<App httpClient={httpClient} />);
 
   const header = screen.getByText("Just Q Shopping List");
   const details = screen.getByText("페이지 별 상품 수");
@@ -12,6 +14,7 @@ test("only renders a UI", async () => {
   const perPageList = within(perPage).getAllByRole("listitem");
 
   const itemList = await screen.findByTestId("item-list");
+
   const itemCount = await within(itemList).findAllByRole("listitem");
 
   const pageCountList = within(pageCount).getAllByRole("listitem");
