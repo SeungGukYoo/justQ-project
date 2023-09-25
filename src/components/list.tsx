@@ -9,17 +9,15 @@ function List({ itemList }: Prop) {
     <div>
       <ul className="listContainer" data-testid="item-list">
         {itemList?.map((item, idx) => {
-          if (idx < 10) {
-            return (
-              <li className="itemContainer" key={item.id}>
-                <div className="imgBox">
-                  <img src={item.main_image} alt={`${item.product_name}이미지`} />
-                </div>
-                <h2>{item.product_name}</h2>
-                <p>{item.price}원</p>
-              </li>
-            );
-          } else return undefined;
+          return (
+            <li className="itemContainer" key={item.id}>
+              <div className="imgBox">
+                <img src={item.main_image} alt={`${item.product_name}이미지`} />
+              </div>
+              <h2>{item.product_name}</h2>
+              <p>{item.price}원</p>
+            </li>
+          );
         })}
       </ul>
     </div>
