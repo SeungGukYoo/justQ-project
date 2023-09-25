@@ -10,8 +10,9 @@ test("only renders a UI", async () => {
   const perPage = screen.getByTestId("per-page");
   const pageCount = screen.getByTestId("page-count");
   const perPageList = within(perPage).getAllByRole("listitem");
+
   const itemList = await screen.findByTestId("item-list");
-  const itemCount = await within(itemList).findByRole("listitem");
+  const itemCount = await within(itemList).findAllByRole("listitem");
 
   const pageCountList = within(pageCount).getAllByRole("listitem");
   const nextPage = screen.getByRole("button", {
@@ -30,7 +31,7 @@ test("only renders a UI", async () => {
 
   expect(perPageList).toHaveLength(5);
   expect(pageCountList).toHaveLength(5);
-  expect(itemCount).toBeGreaterThanOrEqual(1);
+  expect(itemCount.length).toBeGreaterThan(1);
   expect(prePage).toBeInTheDocument();
   expect(nextPage).toBeInTheDocument();
   expect(firstPage).toBeInTheDocument();
