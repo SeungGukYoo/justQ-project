@@ -24,7 +24,7 @@ export default function usePage() {
         const data = await httpClient.get();
         const convertDataToArray: Array<ResponseData[]> = [];
         for (let i = 0; i < Math.ceil(data.length / perPageCount); i++) {
-          convertDataToArray.push(await data.slice(i * perPageCount, (i + 1) * perPageCount));
+          convertDataToArray.push(data.slice(i * perPageCount, (i + 1) * perPageCount));
         }
         setTotalPageCount(Math.ceil(data.length / perPageCount));
         setItemList(convertDataToArray[currentPage]);
