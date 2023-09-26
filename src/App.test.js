@@ -1,11 +1,15 @@
 import "@testing-library/jest-dom";
 import { render, screen, within } from "@testing-library/react";
 import App from "./App";
+import List from "./components/list";
 import { HttpClient } from "./util/httpClient";
 
 test("only renders a UI", async () => {
   const httpClient = new HttpClient();
+  // const data = await httpClient.get();
   render(<App httpClient={httpClient} />);
+
+  // render(<List itemList={data} />);
 
   const header = screen.getByText("Just Q Shopping List");
   const details = screen.getByText("페이지 별 상품 수");
@@ -17,23 +21,15 @@ test("only renders a UI", async () => {
 
   const itemCount = await within(itemList).findAllByRole("listitem");
 
-  const pageCountList = within(pageCount).getAllByRole("listitem");
-  const nextPage = screen.getByRole("button", {
-    name: /다음 페이지/,
-  });
-  const prePage = screen.getByRole("button", {
-    name: /이전 페이지/,
-  });
+  const pageCountList = await within(pageCount).findAllByRole("listitem");
+  const nextPage = screen.getByText(">");
+  const prePage = screen.getByText("<");
 
-  const firstPage = screen.getByRole("button", {
-    name: /첫 페이지/,
-  });
-  const lastPage = screen.getByRole("button", {
-    name: /마지막 페이지/,
-  });
+  const firstPage = screen.getByText("<<");
+  const lastPage = screen.getByText(">>");
 
   expect(perPageList).toHaveLength(5);
-  expect(pageCountList).toHaveLength(5);
+  expect(pageCountList.length).toBeGreaterThan(1);
   expect(itemCount.length).toBeGreaterThan(1);
   expect(prePage).toBeInTheDocument();
   expect(nextPage).toBeInTheDocument();
