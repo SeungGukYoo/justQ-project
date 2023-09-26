@@ -1,26 +1,8 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
+import type { Prop } from "../";
 import "./App.css";
 import List from "./components/list";
 import usePage from "./hooks/usePage";
-import { HttpClient } from "./util/httpClient";
-
-export interface ResponseData {
-  brand: string;
-  category_code: string;
-  id: string;
-  keywords: string[];
-  main_image: string;
-  model: string | null;
-  origin: string;
-  owner_product_code: string;
-  price: string;
-  product_name: string;
-  status: string;
-}
-
-interface Prop {
-  httpClient: HttpClient;
-}
 
 const itemPerCount = [5, 10, 30, 50, 100];
 function App({ httpClient }: Prop) {
