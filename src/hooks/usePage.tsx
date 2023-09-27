@@ -41,7 +41,6 @@ export default function usePage() {
 
   useEffect(() => {
     const beforeUnloadSavedPage = (e: BeforeUnloadEvent) => {
-      console.log("running saved");
       sessionStorage.setItem("pageInfo", perPageCount.toString() + "-" + currentPage.toString());
     };
     window.addEventListener("beforeunload", beforeUnloadSavedPage);
