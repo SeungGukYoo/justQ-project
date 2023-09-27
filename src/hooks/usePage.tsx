@@ -3,6 +3,8 @@ import { useCallback, useState } from "react";
 import { ResponseData } from "../..";
 import { HttpClient } from "../util/httpClient";
 
+const httpClient = new HttpClient();
+
 export default function usePage() {
   const [itemList, setItemList] = useState<[] | ResponseData[]>([]);
   const [perPageCount, setPerPageCount] = useState(30);
@@ -19,15 +21,17 @@ export default function usePage() {
   };
 
   const updateList = useCallback(
-    async (httpClient: HttpClient) => {
+    async (perPage: number = perPageCount, page: number = currentPage) => {
       try {
         const data = await httpClient.get();
         const convertDataToArray: Array<ResponseData[]> = [];
-        for (let i = 0; i < Math.ceil(data.length / perPageCount); i++) {
-          convertDataToArray.push(data.slice(i * perPageCount, (i + 1) * perPageCount));
+        for (let i = 0; i < Math.ceil(data.length / perPage); i++) {
+          convertDataToArray.push(data.slice(i * perPage, (i + 1) * perPage));
         }
-        setTotalPageCount(Math.ceil(data.length / perPageCount));
-        setItemList(convertDataToArray[currentPage]);
+        setTotalPageCount(Math.ceil(data.length / perPage));
+        setItemList(convertDataToArray[page]);
+        setPerPageCount(perPage);
+        setCurrentPageCount(page);
       } catch (error) {
         if (error instanceof Error) {
           throw new Error(error.message);
