@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { ResponseData } from "../..";
 import { HttpClient } from "../util/httpClient";
@@ -38,6 +38,15 @@ export default function usePage() {
       }
     }
   }, [currentPage, perPageCount]);
+
+  useEffect(() => {
+    const beforeUnloadSavedPage = (e: BeforeUnloadEvent) => {
+      console.log("running saved");
+      sessionStorage.setItem("pageInfo", perPageCount.toString() + "-" + currentPage.toString());
+    };
+    window.addEventListener("beforeunload", beforeUnloadSavedPage);
+    return () => window.removeEventListener("beforeunload", beforeUnloadSavedPage);
+  }, [perPageCount, currentPage]);
 
   return { perPageCount, currentPage, updatePage, updatePerPage, itemList, updateList, totalPageCount };
 }
