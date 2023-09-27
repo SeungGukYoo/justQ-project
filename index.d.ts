@@ -17,3 +17,15 @@ export interface ResponseData {
 export interface Prop {
   httpClient: HttpClient;
 }
+
+export interface IPageNavigation {
+  totalPageCount: number;
+  updatePage: (pageNumber: number) => void;
+  currentPage: number;
+  titleRef: MutableRefObject<HTMLHeadingElement | null>;
+}
+
+export interface IItemPerPage {
+  perPageCount: number;
+  changePerPageCount: (e: React.MouseEvent<HTMLLIElement>) => void;
+}
