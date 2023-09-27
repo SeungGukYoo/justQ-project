@@ -1,35 +1,25 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "./App.css";
 import List from "./components/list";
 import usePage from "./hooks/usePage";
-import { HttpClient } from "./util/httpClient";
-
-export interface ResponseData {
-  brand: string;
-  category_code: string;
-  id: string;
-  keywords: string[];
-  main_image: string;
-  model: string | null;
-  origin: string;
-  owner_product_code: string;
-  price: string;
-  product_name: string;
-  status: string;
-}
-
-interface Prop {
-  httpClient: HttpClient;
-}
 
 const itemPerCount = [5, 10, 30, 50, 100];
-function App({ httpClient }: Prop) {
+function App() {
   const { perPageCount, currentPage, updatePage, updatePerPage, itemList, updateList, totalPageCount } = usePage();
   const detailsRef = useRef<null | HTMLDetailsElement>(null);
 
   useEffect(() => {
-    updateList(httpClient);
-  }, [httpClient, updateList]);
+    const beforeUnloadSavedPage = (e: BeforeUnloadEvent) => {
+      console.log("running saved");
+      sessionStorage.setItem("pageInfo", perPageCount.toString() + "-" + currentPage.toString());
+    };
+    window.addEventListener("beforeunload", beforeUnloadSavedPage);
+    return () => window.removeEventListener("beforeunload", beforeUnloadSavedPage);
+  }, [perPageCount, currentPage]);
+
+  useEffect(() => {
+    updateList();
+  }, [updateList]);
 
   const changePerPageCount = (e: React.MouseEvent<HTMLLIElement>) => {
     e.preventDefault();
