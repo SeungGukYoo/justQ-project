@@ -7,7 +7,7 @@ interface Prop {
 function List({ itemList }: Prop) {
   return (
     <div>
-      <ul className="listContainer" data-testid="item-list">
+      <ul className="listContainer">
         {itemList?.map((item, idx) => {
           return (
             <li className="itemContainer" key={item.id}>

@@ -4,7 +4,7 @@ import { IItemPerPage } from "../..";
 const itemPerCount = [5, 10, 30, 50, 100];
 function ItemPerPage({ perPageCount, changePerPageCount }: IItemPerPage) {
   return (
-    <ul data-testid="per-page">
+    <ul>
       {itemPerCount.map((itemCount, idx) => (
         <li
           key={idx}
