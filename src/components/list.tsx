@@ -1,5 +1,5 @@
 import React from "react";
-import { ResponseData } from "../App";
+import { ResponseData } from "../..";
 
 interface Prop {
   itemList: ResponseData[];
