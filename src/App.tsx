@@ -9,15 +9,6 @@ function App() {
   const detailsRef = useRef<null | HTMLDetailsElement>(null);
 
   useEffect(() => {
-    const beforeUnloadSavedPage = (e: BeforeUnloadEvent) => {
-      console.log("running saved");
-      sessionStorage.setItem("pageInfo", perPageCount.toString() + "-" + currentPage.toString());
-    };
-    window.addEventListener("beforeunload", beforeUnloadSavedPage);
-    return () => window.removeEventListener("beforeunload", beforeUnloadSavedPage);
-  }, [perPageCount, currentPage]);
-
-  useEffect(() => {
     updateList();
   }, [updateList]);
 
