@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import type { Prop } from "../";
 import "./App.css";
 import List from "./components/list";
 import usePage from "./hooks/usePage";
 
 const itemPerCount = [5, 10, 30, 50, 100];
-function App({ httpClient }: Prop) {
+function App() {
   const { perPageCount, currentPage, updatePage, updatePerPage, itemList, updateList, totalPageCount } = usePage();
   const detailsRef = useRef<null | HTMLDetailsElement>(null);
 
@@ -19,15 +18,7 @@ function App({ httpClient }: Prop) {
   }, [perPageCount, currentPage]);
 
   useEffect(() => {
-    let isSavedPerPage;
-    let isSavedCurrentPage;
-    if (sessionStorage.getItem("pageInfo")) {
-      let savedSession = sessionStorage.getItem("pageInfo")?.split("-")!;
-      isSavedPerPage = parseInt(savedSession[0]);
-      isSavedCurrentPage = parseInt(savedSession[1]);
-      sessionStorage.removeItem("pageInfo");
-    }
-    updateList(isSavedPerPage, isSavedCurrentPage);
+    updateList();
   }, [updateList]);
 
   const changePerPageCount = (e: React.MouseEvent<HTMLLIElement>) => {
