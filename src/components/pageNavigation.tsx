@@ -1,5 +1,4 @@
-import React from "react";
-import { IPageNavigation } from "../..";
+import type { IPageNavigation } from "../..";
 
 function PageNavigation({ totalPageCount, updatePage, currentPage, titleRef }: IPageNavigation) {
   const movePage = (pageNumber: number) => {
