@@ -1,5 +1,13 @@
 import { HttpClient } from "./src/util/httpClient";
 
+interface IHttpClient {
+  get(): Promise<Array<ResponseData>>;
+}
+
+interface ListProp {
+  itemList: ResponseData[];
+}
+
 export interface ResponseData {
   brand: string;
   category_code: string;
@@ -12,10 +20,6 @@ export interface ResponseData {
   price: string;
   product_name: string;
   status: string;
-}
-
-export interface Prop {
-  httpClient: HttpClient;
 }
 
 export interface IPageNavigation {
