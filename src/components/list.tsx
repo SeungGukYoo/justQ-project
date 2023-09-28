@@ -1,14 +1,10 @@
-import React from "react";
-import { ResponseData } from "../..";
+import type { ListProp, ResponseData } from "../..";
 
-interface Prop {
-  itemList: ResponseData[];
-}
-function List({ itemList }: Prop) {
+function List({ itemList }: ListProp) {
   return (
     <div>
       <ul className="listContainer">
-        {itemList?.map((item, idx) => {
+        {itemList?.map((item: ResponseData) => {
           return (
             <li className="itemContainer" key={item.id}>
               <div className="imgBox">
