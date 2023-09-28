@@ -68,7 +68,7 @@ npm i && npm start
 
   <img src="https://github.com/SeungGukYoo/justQ-project/assets/119836116/d2eb441b-e1da-472d-96b3-29ee19cf21ee" width="350">
 
-* db.json
+* db.json의 데이터 확인
 
   ```json
   {
@@ -88,7 +88,7 @@ npm i && npm start
           "여자양말;양말;패션양말;발목양말;정장양말;이쁜양말;양말브랜드;스포츠양말"
         ]
       },
-  	//...
+    ],
   }
   ```
 
@@ -221,22 +221,9 @@ fetch("https://just-q-json-server-vercel-14upfqa6z-seunggukyoo.vercel.app/posts"
 
 #### 새로 고침시 값 유지
 
-새로고침시 이전 페이지에 대한 정보를 저장하기 위해 브라우저에서 제공하는 스토리지 기능을 활용하여 값을 저장하고자 하였고, 브라우저에서 제공하는 스토리지는 총 4가지가 있었습니다.
+새로고침시 이전 페이지에 대한 정보를 저장하기 위해 브라우저에서 제공하는 스토리지 기능을 활용하여 값을 저장하고자 하였고, 브라우저에서 제공하는 스토리지는 로컬, 세션, 쿠키, 캐시 스토리지가 있었습니다.
 
-1. 로컬 스토리지
-   - 장점: 브라우저를 닫아도 지속되며 5MB의 데이터를 저장하는 것이 가능하다.
-   - 단점: 보안에 취약하며 데이터의 만료를 위해 수동적으로 관리를 해줘야 한다.
-2. 세션 스토리지
-   - 장점: 해당 탭내에서만 접근할 수 있어 탭을 닫으면 자동으로 제거되고, 5MB의 데이터를 저장하는 것이 가능하다.
-   - 단점: 보안에 취약하며 탭을 닫으면 데이터가 사라지게 된다.
-3. 쿠키 스토리지
-   - 장점: 자동으로 만료가 되며, 모든 브라우저에서 작동한다.
-   - 단점: 4KB의 적은 양의 데이터, 보안에 취약하다.
-4. 캐시 스토리지
-   - 장점: 이전에 받아온 리소스를 재사용하기 때문에 네트워크 트래픽을 감소시키며, 캐싱 전략이 가능해진다.
-   - 단점: 관리가 복잡해지며 캐시에 대한 적절한 관리가 필요하고 이에 따른 관리가 어려워질 수 있다.
-
-스토리지의 사용 목적은 단순히 이전 페이지에 필요한 값을 잠깐만 저장하는 목적이였으며, 해당 데이터는 보안과는 크게 연관되지 않았기 때문에 로컬 스토리지와 세션 스토리지중 하나를 선택하고자 하였습니다.<br>보관되는 데이터는 영구적으로 갖고있을 필요가 없었기 때문에 데이터 관리를 보다 쉽게 하고자 세션 스토리지를 선정하였습니다.
+스토리지의 사용 목적은 단순히 이전 페이지에 필요한 값을 잠깐만 저장하는 목적이였으며, 해당 데이터는 보안과는 크게 연관되지 않았기 때문에 사용하고 관리하기 쉬운 로컬 스토리지와 세션 스토리지중 하나를 선택하고자 하였고, 그중에서도 보관되는 데이터는 영구적으로 갖고있을 필요가 없었기 때문에 데이터 관리를 보다 쉽게 하고자 세션 스토리지를 선정하였습니다.
 <br><br>
 윈도우에서 제공하는 `beforeunload`이벤트를 통해서 새로고침이 되는 것을 감지하고, 새로고침이 되었을 때 페이지를 유지하기 위해 필요한 값을 세션 스토리지에 저장하는 로직을 구상하였습니다.
 
@@ -244,8 +231,10 @@ fetch("https://just-q-json-server-vercel-14upfqa6z-seunggukyoo.vercel.app/posts"
 // usePage
 useEffect(() => {
   const beforeUnloadSavedPage = () => {
+    // 세션 스토리지에 필요한 값을 문자열 형태로 저장
     sessionStorage.setItem("pageInfo", perPageCount.toString() + "-" + currentPage.toString());
   };
+  // 페이지에서 나갔을 때(새로고침 등) 이벤트 실행
   window.addEventListener("beforeunload", beforeUnloadSavedPage);
   return () => window.removeEventListener("beforeunload", beforeUnloadSavedPage);
 }, [perPageCount, currentPage]);
@@ -263,10 +252,12 @@ export function isSavedSessionData() {
     perPageCount = parseInt(sessionData[0]);
     pageCount = parseInt(sessionData[1]);
   }
+  // 저장된 세션값이 있다면 저장된 값을 반환하고 그렇지 않다면 0을 반환
   return { perPageCount, pageCount };
 }
 
 // usePage.tsx
+// 저장된 값이 있다면 저장된 값을 사용하고, 저장된 값이 없다면 OR 연산자를 사용하여 0은 falsy한 값으로 다음 값을 사용
 const [perPageCount, setPerPageCount] = useState(isSavedSessionData().perPageCount || 30);
 const [currentPage, setCurrentPageCount] = useState(isSavedSessionData().pageCount || 0);
 ```
