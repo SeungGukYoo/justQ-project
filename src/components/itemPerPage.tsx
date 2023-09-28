@@ -1,5 +1,4 @@
-import React from "react";
-import { IItemPerPage } from "../..";
+import type { IItemPerPage } from "../..";
 
 const itemPerCount = [5, 10, 30, 50, 100];
 function ItemPerPage({ perPageCount, changePerPageCount }: IItemPerPage) {
