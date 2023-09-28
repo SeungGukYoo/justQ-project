@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import "./App.css";
 import ItemPerPage from "./components/itemPerPage";
 import List from "./components/list";
@@ -18,7 +18,6 @@ function App() {
     const choicedPerPageValue = parseInt(e.currentTarget.innerText);
     if (choicedPerPageValue === perPageCount) return;
     updatePerPage(choicedPerPageValue);
-
     if (detailsRef.current) {
       detailsRef.current.open = false;
     }
