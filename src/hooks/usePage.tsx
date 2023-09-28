@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-
-import { ResponseData } from "../..";
+import type { ResponseData } from "../..";
 import { HttpClient } from "../util/httpClient";
 import { isSavedSessionData } from "../util/sessionClient";
 
@@ -22,25 +21,21 @@ export default function usePage() {
   };
 
   const updateList = useCallback(async () => {
-    try {
-      const data = await httpClient.get();
-      const convertDataToArray: Array<ResponseData[]> = [];
-      for (let i = 0; i < Math.ceil(data.length / perPageCount); i++) {
-        convertDataToArray.push(data.slice(i * perPageCount, (i + 1) * perPageCount));
-      }
-      setTotalPageCount(Math.ceil(data.length / perPageCount));
+    const data = await httpClient.get();
+    const convertDataToArray: Array<ResponseData[]> = [];
+    const calcTotalPage = Math.ceil(data.length / perPageCount);
+    for (let i = 0; i < calcTotalPage; i++) {
+      convertDataToArray.push(data.slice(i * perPageCount, (i + 1) * perPageCount));
+
+      setTotalPageCount(calcTotalPage);
       setItemList(convertDataToArray[currentPage]);
       setPerPageCount(perPageCount);
       setCurrentPageCount(currentPage);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
     }
   }, [currentPage, perPageCount]);
 
   useEffect(() => {
-    const beforeUnloadSavedPage = (e: BeforeUnloadEvent) => {
+    const beforeUnloadSavedPage = () => {
       sessionStorage.setItem("pageInfo", perPageCount.toString() + "-" + currentPage.toString());
     };
     window.addEventListener("beforeunload", beforeUnloadSavedPage);
